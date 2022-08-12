@@ -12,17 +12,17 @@ class Main
         system "#{@clear_terminal}"
         puts "Welcome to Minesweeper!"
         puts
-        show_menu
-        
-        @map.fill 9, 0.3
+        start_game
         show_map
     end
     def start_game
-        puts "Please insert the size of the map:"
+        puts "Please insert the size of the map: "
         puts "(map is square, size is the length of the sides)"
-        size = gets.chomp
+        size = gets.chomp.to_i
         puts "Please insert the difficulty:"
-        puts ""
+        puts "(difficulty is a number between 0 and 1 (e.g. 0.3 -> 30% of the map are mines))"
+        difficulty = gets.chomp.to_f
+        @map.fill size, difficulty
     end
     def show_menu
         puts "1: Start new game"
