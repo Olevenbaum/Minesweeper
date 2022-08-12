@@ -109,13 +109,19 @@ class Main
         }
         puts
     end
-    def get_user_input p_type, p_conditions
+    def get_user_input p_type, p_expectations
         input = ""
+        revision = false
         loop do
             if input == "exit"
 
             end
-            break if p_conditions.each {|condition| input == condition}
+            p_expectations.each {|expectation|
+                if input == expectation
+                    revision = true
+                end
+            }
+            break if revision
         end
     end
     def reset_map
