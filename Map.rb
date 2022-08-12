@@ -21,7 +21,6 @@ class Map
                 break if !field.get_status[0]
             end
             @fields[row][column].set_mine true
-            #puts "placed Mine at #{row} | #{column}"
             get_surrounding_fields(row, column).each {|field| field.increase_number_of_mines_nearby}
         end
     end
@@ -39,7 +38,6 @@ class Map
             loop do
                 unless row == p_row and column == p_column
                     surrounding_fields << @fields[row][column]
-                    #puts "added field at #{row} | #{column} to array surrounding_fields"
                 end
                 break if column == p_column + 1 or column == @size - 1
                 column += 1
