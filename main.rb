@@ -12,7 +12,8 @@ class Main
         system "#{@clear_terminal}"
         puts "Welcome to Minesweeper!"
         puts
-        show_menu
+        start_game
+        show_map
     end
     def start_game
         puts "Please insert the size of the map: "
@@ -22,25 +23,21 @@ class Main
         puts "(difficulty is a number between 0 and 1 (e.g. 0.3 -> 30% of the map are mines))"
         difficulty = gets.chomp.to_f
         @map.fill size, difficulty
-        system "#{@clear_terminal}"
-        show_map
     end
     def show_menu
         puts "1: Start new game"
         puts "2: Exit game"
-        puts
         loop do
             puts "Please insert the number of the wanted option:"
-            case gets.chomp.to_i
-            when 0
-                puts
-                puts "Please use any number of the list above:"
+            case gets.chomp
             when 1
                 start_game
                 break
             when 2
                 exit
                 break
+            else
+                puts "Please use any number of the list above:"
             end
         end
         
@@ -70,26 +67,11 @@ class Main
             column = column.to_i
             break if column > 0 and column < @map.get_size
         end
-        [row.to_i - 1, column.to_i - 1]
+        [row.to_i, column.to_i]
     end
     def show_map
-        puts
-        counter = 0
-        output = "    |"
-        divider = "-----"
-        Array(0..(@map.get_size - 1)).each {|number| output << "| #{(number + 1).to_s.ljust 2}"}
-        @map.get_size.times {divider << "----"}
-        puts output
+        output = ""
         @map.get.each {|row|
-            counter += 1
-            output = " #{counter.to_s.ljust 3}|"
-            if counter == 1
-                big_divider = "====="
-                @map.get_size.times {big_divider << "===="}
-                puts big_divider
-            else
-                puts divider
-            end
             row.each {|field|
                 if field.get_status[1]
                     if field.get_status[0]
@@ -105,18 +87,12 @@ class Main
                     output += "| █ "
                 end
             }
-            puts output
+            puts output.delete_prefix "|"
+            divider = ""
+            @map.get_size.times {divider << "----"}
+            puts divider.delete_prefix "-"
+            output = ""
         }
-        puts
-    end
-    def get_user_input p_type, p_conditions
-        input = ""
-        loop do
-            if input == "exit"
-
-            end
-            break if p_conditions.each {|condition| input == condition}
-        end
     end
     def reset_map
         @map.reset
