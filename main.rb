@@ -1,3 +1,12 @@
+BEGIN {
+    if !system "gem list -i os"
+        system "gem i os"
+    end
+    if !system "gem list -i colorize"
+        system "gem i colorize"
+    end
+}
+
 require "os"
 require "colorize"
 require "./Map.rb"
@@ -9,7 +18,7 @@ class Main
         @clear_terminal = get_os
     end
     def main
-        system "#{@clear_terminal}"
+        #system "#{@clear_terminal}"
         puts "Welcome to Minesweeper!"
         puts
         show_menu
@@ -114,9 +123,9 @@ class Main
         revision = false
         loop do
             if input == "exit"
-
+                
             end
-            p_expectations.each {|expectation|
+            p_expectations.to_a.each {|expectation|
                 if input == expectation
                     revision = true
                 end
