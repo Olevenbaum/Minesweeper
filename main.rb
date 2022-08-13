@@ -1,10 +1,18 @@
 BEGIN {
+    puts "OS installed?"
     if !system "gem list -i os"
+        puts "installing OS..."
         system "gem i os"
     end
+    puts "colorized installed?"
     if !system "gem list -i colorize"
+        puts "installing colorized..."
         system "gem i colorize"
     end
+    puts
+    puts "Game ready..."
+    sleep 1
+    puts
 }
 
 require "os"
@@ -18,7 +26,7 @@ class Main
         @clear_terminal = get_os
     end
     def main
-        #system "#{@clear_terminal}"
+        system "#{@clear_terminal}"
         puts "Welcome to Minesweeper!"
         puts
         show_menu
@@ -84,34 +92,34 @@ class Main
     def show_map
         puts
         counter = 0
-        output = "    |"
+        output = "    " + "|".white
         divider = "-----"
-        Array(0..(@map.get_size - 1)).each {|number| output << "| #{(number + 1).to_s.ljust 2}"}
+        Array(0..(@map.get_size - 1)).each {|number| output << "|".white + " #{(number + 1).to_s.ljust 2}".black}
         @map.get_size.times {divider << "----"}
         puts output
         @map.get.each {|row|
             counter += 1
-            output = " #{counter.to_s.ljust 3}|"
+            output = " #{counter.to_s.ljust 2}".black + "|".white
             if counter == 1
                 big_divider = "====="
                 @map.get_size.times {big_divider << "===="}
-                puts big_divider
+                puts big_divider.white
             else
-                puts divider
+                puts divider.white
             end
             row.each {|field|
                 if field.get_status[1]
                     if field.get_status[0]
-                        output << "| ☼ "
+                        output << "|".white + " ☼ ".red
                     elsif field.get_status[2]
-                        output << "| F "
-                    elsif field.get_number_of_mines_nearby != nil && field.get_number_of_mines_nearby != 0
-                        output << "| #{field.get_number_of_mines_nearby} "
+                        output << "|".white + " F "
+                    elsif field.get_number_of_mines_nearby != nil and field.get_number_of_mines_nearby != 0
+                        output << "| ".white + "#{field.get_number_of_mines_nearby} ".green
                     else
-                        output << "|   "
+                        output << "|".white + "   "
                     end
                 else
-                    output += "| █ "
+                    output += "|".white + " █ ".black
                 end
             }
             puts output
