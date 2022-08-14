@@ -10,9 +10,6 @@ BEGIN {
         system "gem i colorize"
     end
     puts
-    puts "Game ready..."
-    sleep 1
-    puts
 }
 
 require "os"
@@ -27,8 +24,6 @@ class Main
     end
     def main
         system "#{@clear_terminal}"
-        puts "Welcome to Minesweeper!"
-        puts
         show_menu
     end
     def start_game
@@ -43,12 +38,14 @@ class Main
         show_map
     end
     def show_menu
+        puts "Welcome to Minesweeper!"
+        puts
         puts "1: Start new game"
         puts "2: Exit game"
         puts
         loop do
             puts "Please insert the number of the wanted option:"
-            case gets.chomp.to_i
+            case get_user_input 
             when 0
                 puts
                 puts "Please use any number of the list above:"
@@ -130,8 +127,16 @@ class Main
         input = ""
         revision = false
         loop do
+            input = gets.chomp
             if input == "exit"
                 
+            end
+            if p_type == "string"
+                value = input.to_s
+            elsif p_type == "integer"
+                value = input.to_i
+            elsif p_type == "float"
+                value = input.to_f
             end
             p_expectations.to_a.each {|expectation|
                 if input == expectation
