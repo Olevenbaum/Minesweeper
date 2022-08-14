@@ -1,12 +1,16 @@
 BEGIN {
+    install = "gem i"
+    unless OS.windows?
+        install = "sudo ".concat install
+    end
     puts "checking gems"
     if !system "gem list -i os"
         puts "installing OS..."
-        system "gem i os"
+        system "#{install} os"
     end
     if !system "gem list -i colorize"
         puts "installing colorized..."
-        system "gem i colorize"
+        system "#{install} colorize"
     end
     puts
 }
@@ -23,6 +27,8 @@ class Main
     end
     def main
         system "#{@clear_terminal}"
+        puts "Welcome to Minesweeper!"
+        puts
         show_menu
     end
     def start_game
@@ -36,37 +42,57 @@ class Main
         20.times {possibilities << (counter += 0.05).round(2)}
         difficulty = get_user_input "f", possibilities
         @map.fill size, difficulty
-        system "#{@clear_terminal}"
-        show_map
-        puts
-
+        loop do
+            show_map
+            select_field
+            #break if
+        end
     end
     def show_menu
-        puts "Welcome to Minesweeper!"
-        puts
-        puts "1: Start new game"
-        puts "2: Exit game"
-        puts
-        puts "Please insert the number of the wanted option:"
-        case get_user_input "i", [1, 2]
-        when 1
-            start_game
-        when 2
-            exit
-        end  
-        puts
+        possible_input = Array(1..2)
+        loop do
+            reset_map
+            puts "#{possible_input[0]}: Start new game"
+            puts "#{possible_input[-1]}: Exit game"
+            puts
+            puts "Please insert the number of the wanted option:"
+            case get_user_input "i", possible_input
+            when possible_input[0]
+                start_game
+            when possible_input[-1]
+                break
+            end  
+            puts
+        end
+        puts "Thank you for playing Minesweeper!"
     end
     def select_field
+        possible_input = Array(1..3)
         puts "Insert number of row you want to select:"
         row = get_user_input "i", Array(1..@map.get_size)
         puts "Insert number of column you want to select:"
         column = get_user_input "i", Array(1..@map.get_size)
-        [row.to_i - 1, column.to_i - 1]
+        puts "Please type the number of the option you want to do with that field:"
+        puts
+        puts "#{possible_input[0]}: Uncover tis field"
+        puts "#{possible_input[1]}: Set a flag on that field"
+        puts "#{possible_input[-1]}: Return to selecting process"
+        case get_user_input "i", possible_input
+        when possible_input[0]
+            
+        when possible_input[1]
+
+        when possible_input[-1]
+            #break
+        end
+        [row.to_i - 1,column.to_i - 1]
         puts
     end
     def show_map
+        system "#{@clear_terminal}"
+        puts
         counter = 0
-        output = "    " + "|".white
+        output = "   " + "|".white
         divider = "-----"
         Array(0..(@map.get_size - 1)).each {|number| output << "|".white + " #{(number + 1).to_s.ljust 2}".black}
         @map.get_size.times {divider << "----"}
@@ -125,6 +151,7 @@ class Main
             break if revision
             puts "Please type in a valid input."
         end
+        puts
         value[0]
     end
     def reset_map
