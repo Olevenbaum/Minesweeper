@@ -1,10 +1,9 @@
 BEGIN {
-    puts "OS installed?"
+    puts "checking gems"
     if !system "gem list -i os"
         puts "installing OS..."
         system "gem i os"
     end
-    puts "colorized installed?"
     if !system "gem list -i colorize"
         puts "installing colorized..."
         system "gem i colorize"
@@ -27,12 +26,15 @@ class Main
         show_menu
     end
     def start_game
-        puts "Please insert the size of the map: "
+        puts "Please insert the size of the map:"
         puts "(map is square, size is the length of the sides)"
-        size = gets.chomp.to_i
+        size = get_user_input "i", Array(1..100)
         puts "Please insert the difficulty:"
         puts "(difficulty is a number between 0 and 1 (e.g. 0.3 -> 30% of the map are mines))"
-        difficulty = gets.chomp.to_f
+        counter = 0
+        possibilities = [counter]
+        20.times {possibilities << (counter += 0.05).round(2)}
+        difficulty = get_user_input "f", possibilities
         @map.fill size, difficulty
         system "#{@clear_terminal}"
         show_map
@@ -43,51 +45,26 @@ class Main
         puts "1: Start new game"
         puts "2: Exit game"
         puts
-        loop do
-            puts "Please insert the number of the wanted option:"
-            case get_user_input 
-            when 0
-                puts
-                puts "Please use any number of the list above:"
-            when 1
-                start_game
-                break
-            when 2
-                exit
-                break
-            end
-        end
-        
+        puts "Please insert the number of the wanted option:"
+        case get_user_input "i", [1, 2]
+        when 1
+            start_game
+        when 2
+            exit
+        end  
         puts
     end
     def select_field
-        row = ""
-        column = ""
         puts "Insert number of row you want to select:"
         puts "(Type 'exit' to get back to the menu)"
-        loop do
-            row = gets.chomp
-            if row == exit
-                
-            end
-            row = row.to_i
-            break if row > 0 and row < @map.get_size
-        end
+        row = get_user_input "i", Array(1..@map.get_size)
         puts "Insert number of column you want to select:"
         puts "(Type 'exit' to get back to the menu)"
-        column = gets.chomp
-        loop do
-            column = gets.chomp
-            if column == exit
-                
-            end
-            column = column.to_i
-            break if column > 0 and column < @map.get_size
-        end
+        column = get_user_input "i", Array(1..@map.get_size)
         [row.to_i - 1, column.to_i - 1]
+        puts
     end
     def show_map
-        puts
         counter = 0
         output = "    " + "|".white
         divider = "-----"
@@ -126,25 +103,28 @@ class Main
     def get_user_input p_type, p_expectations
         input = ""
         revision = false
+        value = Array.new
         loop do
             input = gets.chomp
             if input == "exit"
-                
+
             end
-            if p_type == "string"
-                value = input.to_s
-            elsif p_type == "integer"
-                value = input.to_i
-            elsif p_type == "float"
-                value = input.to_f
+            if p_type == "string" or p_type == "str" or p_type == "s"
+                value << input.to_s
+            elsif p_type == "integer" or p_type == "int" or p_type == "i"
+                value << input.to_i
+            elsif p_type == "float" or p_type == "flo" or p_type == "f"
+                value << input.to_f
             end
             p_expectations.to_a.each {|expectation|
-                if input == expectation
+                if value[0] == expectation
                     revision = true
                 end
             }
             break if revision
+            puts "Please type in a valid input."
         end
+        value[0]
     end
     def reset_map
         @map.reset
