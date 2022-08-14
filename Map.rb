@@ -55,14 +55,14 @@ class Map
         initialize
     end
     def discover p_row, p_column
-        field = fields[p_row][p_column]
+        field = @fields[p_row][p_column]
         if !field.get_flag
             field.set_discovered true
         end
         #TODO: uncover all nearby fields without mines
     end
     def place_flag p_row, p_column
-        fields[p_row][p_column].set_flag
+        @fields[p_row][p_column].set_flag true
     end
     def decrease_number_of_mines
         @number_of_mines -= 1

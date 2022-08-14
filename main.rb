@@ -1,8 +1,8 @@
 BEGIN {
     install = "gem i"
-    unless OS.windows?
-        install = "sudo ".concat install
-    end
+    #unless OS.windows?
+    #    install = "sudo ".concat install
+    #end
     puts "checking gems"
     if !system "gem list -i os"
         puts "installing OS..."
@@ -67,6 +67,7 @@ class Main
         puts "Thank you for playing Minesweeper!"
     end
     def select_field
+        leave = false
         possible_input = Array(1..3)
         puts "Insert number of row you want to select:"
         row = get_user_input "i", Array(1..@map.get_size)
@@ -79,13 +80,12 @@ class Main
         puts "#{possible_input[-1]}: Return to selecting process"
         case get_user_input "i", possible_input
         when possible_input[0]
-            
+            @map.discover row - 1, column - 1
         when possible_input[1]
-
+            @map.place_flag row - 1, column - 1
         when possible_input[-1]
-            #break
+            leave = true
         end
-        [row.to_i - 1,column.to_i - 1]
         puts
     end
     def show_map
@@ -109,12 +109,12 @@ class Main
             end
             row.each {|field|
                 if field.get_status[1]
-                    if field.get_status[0]
-                        output << "|".white + " ☼ ".red
-                    elsif field.get_status[2]
-                        output << "|".white + " F "
+                    if field.get_status[2]
+                        output << "|".white + " F ".yellow
                     elsif field.get_number_of_mines_nearby != nil and field.get_number_of_mines_nearby != 0
                         output << "| ".white + "#{field.get_number_of_mines_nearby} ".green
+                    elsif field.get_status[0]
+                        output << "|".white + " ☼ ".red
                     else
                         output << "|".white + "   "
                     end

@@ -35,7 +35,7 @@ class Field
             @discovered = p_discovered
         end
     end
-    def set_flags p_flag
+    def set_flag p_flag
         if  p_flag == nil
             @flag = !@flag
         else
