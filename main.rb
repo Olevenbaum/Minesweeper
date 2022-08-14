@@ -38,6 +38,8 @@ class Main
         @map.fill size, difficulty
         system "#{@clear_terminal}"
         show_map
+        puts
+
     end
     def show_menu
         puts "Welcome to Minesweeper!"
@@ -56,10 +58,8 @@ class Main
     end
     def select_field
         puts "Insert number of row you want to select:"
-        puts "(Type 'exit' to get back to the menu)"
         row = get_user_input "i", Array(1..@map.get_size)
         puts "Insert number of column you want to select:"
-        puts "(Type 'exit' to get back to the menu)"
         column = get_user_input "i", Array(1..@map.get_size)
         [row.to_i - 1, column.to_i - 1]
         puts
@@ -107,7 +107,7 @@ class Main
         loop do
             input = gets.chomp
             if input == "exit"
-
+                return nil
             end
             if p_type == "string" or p_type == "str" or p_type == "s"
                 value << input.to_s
@@ -119,6 +119,7 @@ class Main
             p_expectations.to_a.each {|expectation|
                 if value[0] == expectation
                     revision = true
+                    break
                 end
             }
             break if revision
