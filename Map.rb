@@ -56,7 +56,7 @@ class Map
     end
     def discover p_row, p_column
         field = @fields[p_row][p_column]
-        if !field.get_flag
+        if !field.get_status[2]
             field.set_discovered true
         end
         #TODO: uncover all nearby fields without mines

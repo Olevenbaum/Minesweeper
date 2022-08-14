@@ -1,12 +1,17 @@
 BEGIN {
     install = "gem i"
-    #unless OS.windows?
-    #    install = "sudo ".concat install
-    #end
     puts "checking gems"
-    if !system "gem list -i os"
-        puts "installing OS..."
-        system "#{install} os"
+    begin
+        if !system "gem list -i os"
+            puts "installing OS..."
+            system "#{install} os"
+        end
+    rescue => exception
+        if !system "gem list -i os"
+            puts "installing OS..."
+            system "sudo #{install} os"
+        end
+        install =  "sudo #{install}"
     end
     if !system "gem list -i colorize"
         puts "installing colorized..."
@@ -44,8 +49,7 @@ class Main
         @map.fill size, difficulty
         loop do
             show_map
-            select_field
-            #break if
+            break if select_field
         end
     end
     def show_menu
@@ -67,7 +71,7 @@ class Main
         puts "Thank you for playing Minesweeper!"
     end
     def select_field
-        leave = false
+        lost = false
         possible_input = Array(1..3)
         puts "Insert number of row you want to select:"
         row = get_user_input "i", Array(1..@map.get_size)
@@ -81,12 +85,29 @@ class Main
         case get_user_input "i", possible_input
         when possible_input[0]
             @map.discover row - 1, column - 1
+            if @map.get[row -1][column - 1].get_status[0]
+                lost = true
+                system "#{@clear_terminal}"
+                puts "$$$$$$$\\   $$$$$$\\   $$$$$$\\  $$\\      $$\\ $$\\ "
+                puts "$$  __$$\\ $$  __$$\\ $$  __$$\\ $$$\\    $$$ |$$ |"
+                puts "$$ |  $$ |$$ /  $$ |$$ /  $$ |$$$$\\  $$$$ |$$ |"
+                puts "$$$$$$$\\ |$$ |  $$ |$$ |  $$ |$$\\$$\\$$ $$ |$$ |"
+                puts "$$  __$$\\ $$ |  $$ |$$ |  $$ |$$ \\$$$  $$ |\\__|"
+                puts "$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |\\$  /$$ |    "
+                puts "$$$$$$$  | $$$$$$  | $$$$$$  |$$ | \\_/ $$ |$$\\ "
+                puts "\\_______/  \\______/  \\______/ \\__|     \\__|\\__|"
+                sleep 3
+                puts
+                puts "You just stepped on a mine! Try again..."
+                gets
+                system "#{@clear_terminal}"
+            end
         when possible_input[1]
             @map.place_flag row - 1, column - 1
         when possible_input[-1]
-            leave = true
+            
         end
-        puts
+        lost
     end
     def show_map
         system "#{@clear_terminal}"
