@@ -56,10 +56,27 @@ class Map
     end
     def discover p_row, p_column
         field = @fields[p_row][p_column]
-        if !field.get_status[2]
-            field.set_discovered true
+        unless field.get_status[0]
+            unless field.get_status[1] or field.get_status[2]
+                field.set_discovered true
+            end
+            unless field.get_number_of_mines_nearby == nil and field.get_number_of_mines_nearby == 0
+                unless p_row <= 0
+                    discover p_row - 1, p_column
+                end
+                unless p_row >= @size - 1
+                    discover p_row + 1, p_column
+                end
+                unless p_column <= 0
+                    discover p_row, p_column - 1
+                end
+                unless p_column >= @size - 1
+                    discover p_row, p_column + 1
+                end
+            else
+                get_surrounding_fields(p_row, p_column).each {|field| field.set_discovered true}
+            end
         end
-        #TODO: uncover all nearby fields without mines
     end
     def place_flag p_row, p_column
         @fields[p_row][p_column].set_flag true

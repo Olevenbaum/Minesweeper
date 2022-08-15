@@ -85,6 +85,23 @@ class Main
         case get_user_input "i", possible_input
         when possible_input[0]
             @map.discover row - 1, column - 1
+            if @map.get[row -1][column - 1].get_status[0]
+                lost = true
+                system "#{@clear_terminal}"
+                puts "$$$$$$$\\   $$$$$$\\   $$$$$$\\  $$\\      $$\\ $$\\ "
+                puts "$$  __$$\\ $$  __$$\\ $$  __$$\\ $$$\\    $$$ |$$ |"
+                puts "$$ |  $$ |$$ /  $$ |$$ /  $$ |$$$$\\  $$$$ |$$ |"
+                puts "$$$$$$$\\ |$$ |  $$ |$$ |  $$ |$$\\$$\\$$ $$ |$$ |"
+                puts "$$  __$$\\ $$ |  $$ |$$ |  $$ |$$ \\$$$  $$ |\\__|"
+                puts "$$ |  $$ |$$ |  $$ |$$ |  $$ |$$ |\\$  /$$ |    "
+                puts "$$$$$$$  | $$$$$$  | $$$$$$  |$$ | \\_/ $$ |$$\\ "
+                puts "\\_______/  \\______/  \\______/ \\__|     \\__|\\__|"
+                sleep 3
+                puts
+                puts "You just stepped on a mine! Try again..."
+                gets
+                system "#{@clear_terminal}"
+            end
         when possible_input[1]
             @map.place_flag row - 1, column - 1
         when possible_input[-1]
@@ -139,6 +156,13 @@ class Main
             if input == "exit"
                 return nil
             end
+            value << input
+            p_expectations.to_a.each {|expectation|
+                if value[-1] == expectation.to_s
+                    revision = true
+                    break
+                end
+            }
             if p_type == "string" or p_type == "str" or p_type == "s"
                 value << input.to_s
             elsif p_type == "integer" or p_type == "int" or p_type == "i"
@@ -146,17 +170,11 @@ class Main
             elsif p_type == "float" or p_type == "flo" or p_type == "f"
                 value << input.to_f
             end
-            p_expectations.to_a.each {|expectation|
-                if value[-1] == expectation
-                    revision = true
-                    break
-                end
-            }
             break if revision
             puts "Please type in a valid input."
         end
         puts
-        value[0]
+        value[-1]
     end
     def reset_map
         @map.reset

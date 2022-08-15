@@ -2,7 +2,7 @@ class Field
     def initialize
         @mine = false
         @number_of_mines_nearby = 0
-        @discovered = true
+        @discovered = false
         @flag = false
     end
     def get_status
