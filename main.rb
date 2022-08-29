@@ -84,8 +84,7 @@ class Main
         puts "#{possible_input[-1]}: Return to selecting process"
         case get_user_input "i", possible_input
         when possible_input[0]
-            @map.discover row - 1, column - 1
-            if @map.get[row -1][column - 1].get_status[0]
+            if @map.discover row - 1, column - 1
                 lost = true
                 system "#{@clear_terminal}"
                 puts "$$$$$$$\\   $$$$$$\\   $$$$$$\\  $$\\      $$\\ $$\\ "
