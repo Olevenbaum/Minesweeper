@@ -111,7 +111,7 @@ class Main
                 puts "#{possible_input[-1]}: Return to selecting process"
                 case get_user_input "i", possible_input
                 when possible_input[0]
-                    if !@map.discover row - 1, column - 1
+                    unless @map.discover row - 1, column - 1
                         lost = true
                         lost_text
                     end
@@ -157,15 +157,8 @@ class Main
                     else
                         output << "|".white + "   "
                     end
-                else #WARNING
-                    if field.get_number_of_mines_nearby != nil and field.get_number_of_mines_nearby != 0
-                        output << "| ".white + "#{field.get_number_of_mines_nearby} ".black
-                    elsif field.get_status[0]
-                        output << "|".white + " ☼ ".black
-                    else
-                        output << "|".white + "   "
-                    end
-                    #output += "|".white + " █ ".black
+                else
+                    output += "|".white + " █ ".black
 
                 end
             }
@@ -191,7 +184,6 @@ class Main
         system "#{@clear_terminal}"
     end
     def get_user_input p_type, p_expectations
-        input = ""
         revision = false
         value = Array.new
         loop do
@@ -201,7 +193,7 @@ class Main
                 return nil
             end
             value << input
-            p_expectations.to_a.each {|expectation|
+            p_expectations.to_a.each { |expectation|
                 if value[-1] == expectation.to_s
                     revision = true
                     break
@@ -224,7 +216,6 @@ class Main
         @map.reset
     end
     def get_os
-        clear_command = ""
         if OS.windows?
             clear_command = "cls"
         else

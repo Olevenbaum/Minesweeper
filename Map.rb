@@ -18,7 +18,7 @@ class Map
         @number_of_mines.times do
             loop do
                 field = @fields[row = rand(@size)][column = rand(@size)]
-                break if !field.get_status[0]
+                break unless field.get_status[0]
             end
             @fields[row][column].set_mine true
             get_surrounding_fields(row, column).each {|field| field.increase_number_of_mines_nearby}
@@ -65,6 +65,7 @@ class Map
             return false
         else
             unless field.get_status[1] or field.get_status[2]
+                field.set_discovered true
                 if field.get_number_of_mines_nearby == nil or field.get_number_of_mines_nearby == 0
                     unless p_row == 0
                         discover p_row - 1, p_column
@@ -79,7 +80,6 @@ class Map
                         discover p_row, p_column + 1
                     end
                 end
-                field.set_discovered true
             end
         end
         true
@@ -91,12 +91,12 @@ class Map
         @fields
     end
     def get_size
-        return @size
+        @size
     end
     def get_difficulty
-        return @difficulty
+        @difficulty
     end
     def get_number_of_mines
-        return @number_of_mines
+        @number_of_mines
     end
 end
