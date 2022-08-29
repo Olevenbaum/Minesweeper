@@ -51,6 +51,11 @@ class Map
         end
         surrounding_fields
     end
+    def set p_fields
+        if p_fields
+            @fields = p_fields
+        end
+    end
     def reset
         initialize
     end
@@ -73,23 +78,14 @@ class Map
                     unless p_column == @size
                         discover p_row, p_column + 1
                     end
-                else
-                    field.set_discovered true
                 end
-                return true
+                field.set_discovered true
             end
         end
+        true
     end
     def place_flag p_row, p_column
         @fields[p_row][p_column].set_flag true
-    end
-    def decrease_number_of_mines
-        @number_of_mines -= 1
-    end
-    def set p_fields
-        if p_fields
-            @fields = p_fields
-        end
     end
     def get
         @fields

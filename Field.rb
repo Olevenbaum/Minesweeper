@@ -5,21 +5,17 @@ class Field
         @discovered = false
         @flag = false
     end
-    def get_status
-        [@mine, @discovered, @flag]
-    end
-    def get_number_of_mines_nearby
-        @number_of_mines_nearby
-    end
     def set_mine p_mine
-        if p_mine == nil
-            @mine = !@mine
-        else
-            @mine = p_mine
-        end
+        @mine = p_mine
         if @mine
             @number_of_mines_nearby = nil
         end
+    end
+    def set_discovered p_discovered
+        @discovered = p_discovered
+    end
+    def set_flag p_flag
+        @flag = p_flag
     end
     def increase_number_of_mines_nearby
         if @mine
@@ -28,18 +24,10 @@ class Field
             @number_of_mines_nearby += 1
         end
     end
-    def set_discovered p_discovered
-        if p_discovered == nil
-            @discovered = !@discovered
-        else
-            @discovered = p_discovered
-        end
+    def get_status
+        [@mine, @discovered, @flag]
     end
-    def set_flag p_flag
-        if  p_flag == nil
-            @flag = !@flag
-        else
-            @flag = p_flag
-        end
+    def get_number_of_mines_nearby
+        @number_of_mines_nearby
     end
 end
