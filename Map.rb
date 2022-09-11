@@ -69,15 +69,39 @@ class Map
                 if field.get_number_of_mines_nearby == nil or field.get_number_of_mines_nearby == 0
                     unless p_row == 0
                         discover p_row - 1, p_column
+                        unless p_column == 0
+                            field = @fields[p_row - 1][p_column - 1]
+                            if field.get_number_of_mines_nearby > 0
+                                field.set_discovered true
+                            end
+                        end
                     end
                     unless p_column == 0
                         discover p_row, p_column - 1
+                        unless p_row == @size
+                            field = @fields[p_row + 1][p_column - 1]
+                            if field.get_number_of_mines_nearby > 0
+                                field.set_discovered true
+                            end
+                        end
                     end
                     unless p_row == @size
                         discover p_row + 1, p_column
+                        unless p_column == @size
+                            field = @fields[p_row + 1][p_column + 1]
+                            if field.get_number_of_mines_nearby > 0
+                                field.set_discovered true
+                            end
+                        end
                     end
                     unless p_column == @size
                         discover p_row, p_column + 1
+                        unless p_row == 0
+                            field = @fields[p_row - 1][p_column + 1]
+                            if field.get_number_of_mines_nearby > 0
+                                field.set_discovered true
+                            end
+                        end
                     end
                 end
             end

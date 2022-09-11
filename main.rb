@@ -136,6 +136,33 @@ class Main
         @map.get_size.times {divider << "----"}
         divider = divider.delete_suffix "-"
         puts output
+        #@map.get.each {|row|
+        #    counter += 1
+        #    output = " #{counter.to_s.ljust 2}".black + "|".white
+        #    if counter == 1
+        #        big_divider = "====="
+        #        @map.get_size.times {big_divider << "===="}
+        #        puts big_divider.delete_suffix("=").white
+        #    else
+        #        puts divider.white
+        #    end
+        #    row.each {|field|
+        #        if field.get_status[2]
+        #            output << "|".white + " F ".yellow
+        #        elsif field.get_status[1]
+        #            if field.get_number_of_mines_nearby != nil and field.get_number_of_mines_nearby != 0
+        #                output << "| ".white + "#{field.get_number_of_mines_nearby} ".green
+        #            elsif field.get_status[0]
+        #                output << "|".white + " ☼ ".red
+        #            else
+        #                output << "|".white + "   "
+        #            end
+        #        else
+        #            output += "|".white + " █ ".black   
+        #        end
+        #    }
+        #    puts output
+        #}
         @map.get.each {|row|
             counter += 1
             output = " #{counter.to_s.ljust 2}".black + "|".white
@@ -158,7 +185,13 @@ class Main
                         output << "|".white + "   "
                     end
                 else
-                    output += "|".white + " █ ".black
+                    if field.get_number_of_mines_nearby != nil and field.get_number_of_mines_nearby != 0
+                        output << "| ".white + "#{field.get_number_of_mines_nearby} ".black
+                    elsif field.get_status[0]
+                        output << "|".white + " ☼ ".black
+                    else
+                        output << "|".white + "   "
+                    end
 
                 end
             }
