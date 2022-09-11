@@ -97,7 +97,7 @@ class Main
     end
     def select_field
         lost = false
-        possible_input = Array(1..3)
+        possible_input = Array(1..4)
         puts "Insert number of row you want to select:"
         row = get_user_input "i", Array(1..@map.get_size)
         unless row == nil
@@ -108,6 +108,7 @@ class Main
                 puts
                 puts "#{possible_input[0]}: Uncover this field"
                 puts "#{possible_input[1]}: Set a flag on that field"
+                puts "#{possible_input[2]}: Remove flag from that field"
                 puts "#{possible_input[-1]}: Return to selecting process"
                 case get_user_input "i", possible_input
                 when possible_input[0]
@@ -117,6 +118,8 @@ class Main
                     end
                 when possible_input[1]
                     @map.place_flag row - 1, column - 1
+                when possible_input[2]
+                    @map.delete_flag row - 1, column - 1
                 when possible_input[-1]
                     #TODO
                 when nil

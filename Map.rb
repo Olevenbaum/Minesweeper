@@ -109,7 +109,24 @@ class Map
         true
     end
     def place_flag p_row, p_column
-        @fields[p_row][p_column].set_flag true
+        field = @fields[p_row][p_column]
+        unless field.get_status[1]
+            field.set_flag true
+        else
+            puts "There cant be a flag placed on this field"
+            sleep 2
+            puts
+        end
+    end
+    def delete_flag p_row, p_column
+        field = @fields[p_row][p_column]
+        if field.get_status[2]
+            field.set_flag false
+        else
+            puts "There is no flag to be removed on this field"
+            sleep 2
+            puts
+        end
     end
     def get
         @fields
